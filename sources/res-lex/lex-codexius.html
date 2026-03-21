@@ -40,13 +40,9 @@
         }
 
         /* Buscador horizontal compacto */
-        .search-group {
-            position: sticky;
-            top: 0;
-            display: flex;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(5px);
-            padding: 1rem;
+        .search-group {           
+            display: flex;   
+
         }
 
         .search-group input {
@@ -121,7 +117,6 @@
         /* Contenedores Dinámicos (Details) */
         #render-area details {
             margin: 0.5rem 0 0.8rem 0;
-
             transition: border-color 0.2s;
         }
 
@@ -158,11 +153,11 @@
 
         /* Contenido de la Norma (Article) */
         #render-area {
-            padding: 2rem 3rem;
+            padding: 1rem;
         }
 
         #render-area article {
-            padding: 2rem;
+            padding: 1rem;
             border-top: 1px solid var(--border);
         }
 
@@ -190,6 +185,8 @@
 
         nav {
             position: relative;
+            padding: 1rem;
+            justify-content: center;
         }
 
         #biblioteca-selector{  
@@ -197,6 +194,12 @@
             height: 50vh;
             overflow: auto;
         }
+
+        main{
+            padding: 0;
+        }
+
+       
     </style>
 </head>
 
@@ -208,8 +211,13 @@
             <small>Esto puede demorar en leyes extensas</small>
         </div>
     </div>
-    <nav>
-        <div class="brand">CODEX<span>_IUS</span></div>
+    <nav style="position: sticky; top: 0;">
+        <section id="herramientas-lectura">
+            <div class="search-group">
+                <input type="number" id="art-input" placeholder="Ir al Art. N°">
+                <button id="art-btn">SALTAR</button>
+            </div>
+        </section>
         <a href="../../index.html" style="border:none;">VOLVER</a>
     </nav>
     <header>
@@ -217,7 +225,7 @@
         <p id="ley-meta">Seleccione una norma para visualizar y comenzar la busqueda.</p>
     </header>
     <main>
-
+ 
         <section id="biblioteca-selector">
             <details data-type="tratados">
                 <summary>Jurisdicción Internacional</summary>
@@ -251,12 +259,7 @@
 
         </section>
 
-        <section id="herramientas-lectura">
-            <div class="search-group">
-                <input type="number" id="art-input" placeholder="Ir al Art. N°">
-                <button id="art-btn">SALTAR</button>
-            </div>
-        </section>
+      
 
         <section id="render-area">
             <article>
