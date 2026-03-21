@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codex_Ius // Terminal Jurídica</title>
-    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="/css/theme.css">
     <style>
         #btn-digesto {
             display: block;
@@ -24,9 +24,14 @@
         <h1>Codex_Ius:</h1>
         <div class="mini-terminal">
             <div class="bios-loader">
-                <div class="line">> SYSTEM_READY</div>
+                <div class="line">> INITIALIZING SIBYL_CORE...</div>
+                <div class="step"><span class="label">MOD_LEARN</span><span class="status"></span></div>
+                <div class="step"><span class="label">MOD_TEACH</span><span class="status"></span></div>
+                <div class="step"><span class="label">MOD_SERVE</span><span class="status"></span></div>
+
+                <div class="status-final">SYSTEM_READY</div>
                 <div class="user-info">
-                    MODO: <span id="usuario">OFFLINE_STATIC</span>
+                    Welcome user: <span id="usuario">Offline Guest</span>
                     <span class="cursor">_</span>
                 </div>
             </div>
@@ -37,9 +42,9 @@
         <article class="card-term" data-type="res-app">
             <div class="card-header"><span class="dot"></span> course.txt</div>
             <div class="card-body">
-                <h3>Course: Intro. Pr. Derecho Procesal</h3>
-                <p>Generador de publicaciones en markdown.</p>
-                <a href="./sources/res-archive/introprocesal.html" class="btn-exec">OPEN_STORAGE</a>
+                <h3>Pass: IPDP2026</h3>
+                <p>Introducción a Prácticas del Derecho Procesal - 2026</p>
+                <a href="./sources/res-archive/introprocesal.html" class="btn-exec">OPEN_DOCS</a>
             </div>
         </article>
 
@@ -52,9 +57,30 @@
                     <hr>
                     <article>
                         <div class="card-body">
+                            <h3>> Código Civil y Comercial</h3>
+                            <p>Acceso rápido al CCYC argentino.</p>
+                            <a href="./sources/res-lex/lex-codexius.html?ley=ccyc" class="btn-exec">READ_ONLY</a>
+                        </div>
+                    </article>
+                    <article>
+                        <div class="card-body">
                             <h3>> Código Penal</h3>
                             <p>Acceso rápido al CP argentino.</p>
-                            <a href="./sources/res-lex/cpn.html" class="btn-exec">READ_ONLY</a>
+                            <a href="./sources/res-lex/lex-codexius.html?ley=cpn" class="btn-exec">READ_ONLY</a>
+                        </div>
+                    </article>
+                    <article>
+                        <div class="card-body">
+                            <h3>> Código Procesal Civil Comercial y Tributario de Mendoza</h3>
+                            <p>Acceso rápido al CPCCT mendocino.</p>
+                            <a href="./sources/res-lex/lex-codexius.html?ley=cpcmdz" class="btn-exec">READ_ONLY</a>
+                        </div>
+                    </article>
+                     <article>
+                        <div class="card-body">
+                            <h3>> Código Procesal Penal de Mendoza</h3>
+                            <p>Acceso rápido al CPP mendocino.</p>
+                            <a href="./sources/res-lex/lex-codexius.html?ley=cppmdz" class="btn-exec">READ_ONLY</a>
                         </div>
                     </article>
                 </details>
