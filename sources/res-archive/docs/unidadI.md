@@ -35,11 +35,13 @@
 
 * **Orden de Prelación de Normas:** Como normas supremas debe respetarse el bloque constitucional integrado por la Constitución Nacional y los Tratados de Derechos Humanos con jerarquia constitucional, conforme al Art. 31 de la CN y Art. 75 inc. 22. En Mendoza, el **Art. 1 del CPCCyT** establece el siguiente orden:
 
-    a) en primer lugar, la Constitución de la Nación y los Tratados Internacionales en los que la Nación sea parte, 
-    b) en segundo lugar las leyes nacionales, los reglamentos y decretos dictados por el Poder Ejecutivo Nacional en uso de sus atribuciones;
-    c) en tercer lugar la Constitución de la Provincia, leyes, reglamentos y decretos provinciales y las ordenanzas municipales. La Constitución de la Provincia deberá ser aplicada por los jueces, como ley suprema con respecto a las leyes sancionadas y que sancionare la Legislatura y a los decretos, ordenanzas y reglamentos dictados o que dictare el Poder Ejecutivo, las municipalidades y reparticiones autorizadas a ello.
+    1. En primer lugar, la Constitución de la Nación y los Tratados Internacionales en los que la Nación sea parte,
 
-**Nota:** De acuerdo al CPCCyT las disposiciones procesales civiles en Mendoza revisten el carácter de Orden Público, sin perjuicio de principios procesales.
+    2. En segundo lugar las leyes nacionales, los reglamentos y decretos dictados por el Poder Ejecutivo Nacional en uso de sus atribuciones;
+
+    3. En tercer lugar la Constitución de la Provincia, leyes, reglamentos y decretos provinciales y las ordenanzas municipales. La Constitución de la Provincia deberá ser aplicada por los jueces, como ley suprema con respecto a las leyes sancionadas y que sancionare la Legislatura y a los decretos, ordenanzas y reglamentos dictados o que dictare el Poder Ejecutivo, las municipalidades y reparticiones autorizadas a ello.
+
+> Nota: De acuerdo al CPCCyT las disposiciones procesales civiles en Mendoza revisten el carácter de Orden Público, sin perjuicio de principios procesales.
 
     
 
@@ -290,11 +292,11 @@ Para evitar sentencias contradictorias, el Juez del **proceso principal** siempr
 
 ---
 
-# 📖 Guía Teórica: Clasificación de la Competencia
+# 📖 Guía Teórica: Resumen de Competencia
 
 Esta guía organiza los criterios doctrinales y legales para determinar la intervención judicial, desde la división territorial de Mendoza hasta la distinción entre justicia Federal y Ordinaria.
 
----
+
 
 ## 1. Clasificación según Criterios Objetivos y Funcionales
 
@@ -312,7 +314,7 @@ Se refiere a la jerarquía y revisión de las decisiones:
 2.  **2ª Instancia:** Cámaras de Apelaciones que revisan lo actuado tras un recurso (apelación/nulidad).
 3.  **SCJ (Provincial) o CSJN (Nación):** Instancias extraordinarias para control de constitucionalidad.
 
----
+
 
 ## 2. Competencia Territorial (Mendoza)
 
@@ -325,7 +327,7 @@ El territorio se divide en secciones para acercar al juez al hecho. En la provin
 | **3ª (Este)** | San Martín, Junín, Rivadavia, La Paz y Santa Rosa. |
 | **4ª (Valle de Uco)** | Tunuyán, Tupungato y San Carlos. |
 
----
+
 
 ## 3. Justicia Federal vs. Justicia Ordinaria
 
@@ -342,7 +344,7 @@ Regida por el **Art. 75 inc. 12 de la C.N.**
 *   Aplica los **Códigos de Fondo**: Civil, Comercial, Penal, Minería, Trabajo y Seguridad Social.
 *   *Regla:* Es la regla general para conflictos entre particulares dentro de una provincia.
 
----
+
 
 ## 4. Competencia Originaria de la CSJN (Art. 117 C.N.)
 
@@ -350,7 +352,7 @@ Casos donde la **Corte Suprema de Justicia de la Nación** actúa como tribunal 
 1.  Asuntos concernientes a **Embajadores, Ministros y Cónsules extranjeros**.
 2.  Asuntos en los que **una Provincia fuese parte**.
 
----
+
 
 ## 5. Conceptos Adicionales
 *   **Turno:** Es una división de trabajo interna (organización) entre juzgados de igual competencia.
