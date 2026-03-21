@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 150);
         } else {
-            alert(`El Artículo ${numArt} no fue localizado en las secciones actuales.`);
+            alert(`El Artículo ${numArt} no se encuentra en esta sección. Revise los arts. correspondientes a cada título.`);
         }
     }
 
