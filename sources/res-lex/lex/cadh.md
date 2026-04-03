@@ -1,6 +1,6 @@
 # CONVENCION AMERICANA SOBRE DERECHOS HUMANOS
 
-## PREAMBULO
+# PREAMBULO
 
 Los Estados Americanos signatarios de la presente Convención.
 
@@ -16,7 +16,7 @@ Considerando que la Tercera Conferencia Interamericana Extraordinaria (Buenos Ai
 
 Han convenido lo siguiente:
 
-### PARTE I \- DEBERES DE LOS ESTADOS Y DERECHOS PROTEGIDOS
+## PARTE I \- DEBERES DE LOS ESTADOS Y DERECHOS PROTEGIDOS
 
 ### CAPITULO I \- ENUMERACION DE DEBERES
 
@@ -326,7 +326,7 @@ Podrán ser incluidos en el régimen de protección de esta Convención otros de
      
 2. Los derechos de cada persona están limitados por los derechos de los demás, por la seguridad de todos y por las justas exigencias del bien común, en una sociedad democrática.
 
-### PARTE II. MEDIOS DE LA PROTECCION
+## PARTE II. MEDIOS DE LA PROTECCION
 
 ### CAPITULO VI- DE LOS ORGANOS COMPETENTES
 
@@ -630,7 +630,7 @@ Esta última no podrá introducirle modificaciones.
 
 Solamente a solicitud de la Comisión o de la Corte, según el caso, corresponde a la Asamblea General de la Organización resolver sobre las sanciones aplicables a los miembros de la Comisión o jueces de la Corte que hubiesen incurrido en las causales previstas en los respectivos estatutos. Para dictar una revolución se requerirá una mayoría de los dos tercios de los votos de los Estados Miembros de la Organización en el caso de los miembros de la Comisión y además de los dos tercios de los votos de los Estados Partes en la Convención si se tratare de jueces de la Corte.
 
-### PARTE III \- DISPOSICIONES GENERALES Y TRANSITORIAS
+## PARTE III \- DISPOSICIONES GENERALES Y TRANSITORIAS
 
 ### CAPITULO X \- FIRMA RATIFICACION, RESERVA, ENMIENDA, PROTOCOLO Y DENUNCIA.
 

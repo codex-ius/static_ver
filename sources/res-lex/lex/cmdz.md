@@ -1,4 +1,5 @@
 # Constitución de la provincia de Mendoza
+
 ## PREAMBULO 
 
 ***Nos, los representantes del pueblo de la Provincia de Mendoza, reunidos en Convención, por su voluntad y elección, con el objeto de constituir el mejor gobierno de todos y para todos, afianzar la justicia, consolidar la paz interna, proveer a la seguridad común, promover el bienestar general y asegurar los beneficios de la libertad para el pueblo y para los demás hombres que quieran habitar su suelo, invocando la protección de Dios, fuente de toda razón y justicia, ordenamos, decretamos y establecemos esta Constitución.***
