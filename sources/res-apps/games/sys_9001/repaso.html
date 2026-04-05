@@ -34,8 +34,9 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 2px solid var(--dim);
+            border: 8px solid var(--dim);
             transition: border-color 0.4s ease;
+            padding: 1rem;
         }
 
         /* Escáner Biométrico */
@@ -62,12 +63,10 @@
         }
 
         header {
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
+            padding: 15px 25px;           
             background: var(--panel);
             border-bottom: 1px solid var(--dim);
-            align-items: center;
+           
         }
 
         .sys-info {
@@ -92,6 +91,7 @@
             background: #080808;
             border-bottom: 1px solid #111;
             letter-spacing: 1px;
+            padding: 1rem;
         }
 
         .main-display {
@@ -113,8 +113,8 @@
         }
 
         .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 15px;
             width: 100%;
             max-width: 800px;
@@ -124,10 +124,10 @@
             background: transparent;
             border: 1px solid var(--dim);
             color: var(--text);
-            padding: 22px;
+            padding: 1rem;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.1s;
+            /*font-size: 0.9rem;*/
+            /*transition: 0.1s;*/
             text-transform: uppercase;
         }
 
@@ -227,15 +227,25 @@
             width: 100%;
             cursor: pointer;
         }
+
+        /* Colores dinámicos basados en la clase del body */
+.state-stable #status-text { color: var(--safe); }
+.state-warning #status-text { color: var(--warning); }
+.state-critical #status-text { color: var(--critical); }
+
+/* Opcional: Que la barra de vigencia también cambie de color automáticamente */
+.state-stable #stability-bar { background: var(--safe); }
+.state-warning #stability-bar { background: var(--warning); }
+.state-critical #stability-bar { background: var(--critical); }
     </style>
 </head>
 
 <body>
 
     <header>
-        <div class="sys-info">SESIÓN_REPASO // NÚCLEO_9001</div>
+        <div class="sys-info">SYS_9001 // REPASO</div>
         <div id="timer" class="session-timer">25:00</div>
-        <div id="status-text" style="font-size: 0.6rem; color: var(--safe);">ESTADO: ESTABLE</div>
+        <div id="status-text" style="font-size: 0.6rem;">ESTADO: ESTABLE</div>
     </header>
 
     <div id="ia-console">SISTEMA INICIADO. MANTENGA FLUJO DE RESPUESTA CONSTANTE.</div>
@@ -265,178 +275,196 @@
             </div>
         </div>
     </div>
- <script>
-    const DB_LEGAL = {
-        circunscripciones: {
-            "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
-            "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
-            "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
-            "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
-        },
-        competencias: {
-            "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
-            "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
-            "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
-        }
-    };
 
-    const Motores = {
-        circunscripcionInversa() {
-            const cats = Object.keys(DB_LEGAL.circunscripciones);
-            const catC = cats[Math.floor(Math.random() * cats.length)];
-            const deptos = DB_LEGAL.circunscripciones[catC];
-            const depto = deptos[Math.floor(Math.random() * deptos.length)];
-            const catI = cats.find(c => c !== catC);
-            return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
-        },
-        circunscripcionDirecta() {
-            const cats = Object.keys(DB_LEGAL.circunscripciones);
-            const catQ = cats[Math.floor(Math.random() * cats.length)];
-            const correctos = DB_LEGAL.circunscripciones[catQ];
-            const incorrectos = DB_LEGAL.circunscripciones[cats.find(c => c !== catQ)];
-            return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
-        },
-        competenciaMaterial() {
-            const tribunales = Object.keys(DB_LEGAL.competencias);
-            const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
-            const procesos = DB_LEGAL.competencias[tribunalC];
-            const item = procesos[Math.floor(Math.random() * procesos.length)];
-            const tribunalI = tribunales.find(t => t !== tribunalC);
-            return {
-                q: `Los procesos de ${item.toUpperCase()} son competencia de:`,
-                a: tribunalC,
-                opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
-                tipo: 'COMPETENCIA'
-            };
-        },
-        generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
-            const modo = Math.floor(Math.random() * 3); 
-            let opciones = [], respuesta = "";
-            if (modo === 0) { opciones = [correctos[0], incorrectos[0]]; respuesta = correctos[0]; }
-            else if (modo === 1) { opciones = [incorrectos[0], incorrectos[1]]; respuesta = "NINGUNO ES CORRECTO"; }
-            else { opciones = [correctos[0], correctos[1]]; respuesta = "AMBOS SON CORRECTOS"; }
-            return { q: pregunta, a: respuesta, opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
-        },
-        estructurar(pregunta, correcta, incorrecta, tipo) {
-            return { q: pregunta, a: correcta, opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
-        }
-    };
-
-    const Protocolo = {
-        concentracion: 100,
-        errores: 0,
-        tiempoSesion: 25 * 60,
-        fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
-
-        init() {
-            this.render();
-            this.startTicker();
-        },
-
-        render() {
-            // BALANCE 50/50 para asegurar diversidad en el repaso
-            let desafio;
-            if (Math.random() > 0.5) {
-                desafio = Motores.competenciaMaterial();
-            } else {
-                desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+    <script>
+        // 1. SISTEMA DE PERSISTENCIA
+        const SistemaPersistencia = {
+            guardarPuntaje(categoria, puntaje) {
+                try {
+                    let historial = JSON.parse(localStorage.getItem(`9001_${categoria}`)) || [];
+                    historial.push({
+                        puntos: puntaje,
+                        fecha: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    });
+                    historial.sort((a, b) => b.puntos - a.puntos);
+                    historial = historial.slice(0, 5);
+                    localStorage.setItem(`9001_${categoria}`, JSON.stringify(historial));
+                } catch (e) {
+                    console.error("Error en persistencia:", e);
+                }
             }
-            
-            this.current = desafio;
-            document.getElementById('prompt').innerText = desafio.q;
-            document.getElementById('options-grid').innerHTML = desafio.opts.map(o =>
-                `<button class="btn" onclick="Protocolo.check('${o}')">${o}</button>`
-            ).join('');
-        },
+        };
 
-        check(val) {
-            if (val === this.current.a) {
-                this.errores = 0;
-                this.concentracion = Math.min(100, this.concentracion + 8);
-                this.logIA("ESTABILIDAD REFORZADA.", "var(--safe)");
-            } else {
-                this.fallos[this.current.tipo]++;
-                this.errores++;
-                this.concentracion -= 15;
-                this.logIA(`ERROR DETECTADO. NÚCLEO EN ${Math.max(0, Math.floor(this.concentracion))}%`, "var(--critical)");
+        const DB_LEGAL = {
+            circunscripciones: {
+                "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
+                "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
+                "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
+                "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
+            },
+            competencias: {
+                "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
+                "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
+                "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
             }
-            this.updateUI();
-            if (this.errores < 3 && this.concentracion > 0) this.render();
-        },
+        };
 
-        updateUI() {
-            const bar = document.getElementById('stability-bar');
-            if (bar) bar.style.width = `${Math.max(0, this.concentracion)}%`;
-
-            if (this.concentracion <= 0 || this.errores >= 3) {
-                this.showResult(false);
-                return;
+        const Motores = {
+            circunscripcionInversa() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catC = cats[Math.floor(Math.random() * cats.length)];
+                const depto = DB_LEGAL.circunscripciones[catC][Math.floor(Math.random() * DB_LEGAL.circunscripciones[catC].length)];
+                const catI = cats.find(c => c !== catC);
+                return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
+            },
+            circunscripcionDirecta() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catQ = cats[Math.floor(Math.random() * cats.length)];
+                const correctos = DB_LEGAL.circunscripciones[catQ];
+                const incorrectos = DB_LEGAL.circunscripciones[cats.find(c => c !== catQ)];
+                return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
+            },
+            competenciaMaterial() {
+                const tribunales = Object.keys(DB_LEGAL.competencias);
+                const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
+                const procesos = DB_LEGAL.competencias[tribunalC];
+                const item = procesos[Math.floor(Math.random() * procesos.length)];
+                const tribunalI = tribunales.find(t => t !== tribunalC);
+                return {
+                    q: `Los procesos de ${item.toUpperCase()} son competencia de:`,
+                    a: tribunalC,
+                    opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
+                    tipo: 'COMPETENCIA'
+                };
+            },
+            generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
+                const modo = Math.floor(Math.random() * 3);
+                let opciones = [], respuesta = "";
+                if (modo === 0) { opciones = [correctos[0], incorrectos[0]]; respuesta = correctos[0]; }
+                else if (modo === 1) { opciones = [incorrectos[0], incorrectos[1]]; respuesta = "NINGUNO ES CORRECTO"; }
+                else { opciones = [correctos[0], correctos[1]]; respuesta = "AMBOS SON CORRECTOS"; }
+                return { q: pregunta, a: respuesta, opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
+            },
+            estructurar(pregunta, correcta, incorrecta, tipo) {
+                return { q: pregunta, a: correcta, opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
             }
+        };
 
-            const body = document.body;
-            const statusLabel = document.getElementById('status-text');
-            if (this.concentracion < 30) {
-                body.className = 'state-critical';
-                if (statusLabel) statusLabel.innerText = "ESTADO: CRÍTICO";
-            } else if (this.concentracion < 60) {
-                body.className = 'state-warning';
-                if (statusLabel) statusLabel.innerText = "ESTADO: DEGRADADO";
-            } else {
-                body.className = '';
-                if (statusLabel) statusLabel.innerText = "ESTADO: ESTABLE";
-            }
-        },
+        const Protocolo = {
+            vigencia: 100,
+            vicios: 0,
+            tiempoSesion: 25 * 60,
+            fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
 
-        showResult(success) {
-            clearInterval(this.ticker);
-            const overlay = document.getElementById('result-overlay');
-            const efficiency = document.getElementById('res-efficiency');
-            const finalEff = Math.max(0, Math.floor(this.concentracion));
-            
-            overlay.style.display = 'flex';
-            if (efficiency) efficiency.innerText = finalEff + "%";
-            
-            // Persistencia del puntaje de repaso
-            if (window.SistemaPersistencia) window.SistemaPersistencia.guardarPuntaje('repaso', finalEff);
+            init() {
+                this.render();
+                this.startTicker();
+            },
 
-            // Cálculo de área de degradación
-            let debilidad = "ESTABLE";
-            if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
-            else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
+            render() {
+                let desafio;
+                if (Math.random() > 0.5) {
+                    desafio = Motores.competenciaMaterial();
+                } else {
+                    desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+                }
 
-            const msgArea = document.getElementById('res-msg');
-            if (msgArea) {
-                msgArea.innerHTML = `Sesión finalizada. <br><span style="font-size:0.7rem; color:var(--dim)">VECTOR_DE_FALLO: <span style="color:var(--critical)">${debilidad}</span></span>`;
-            }
+                this.current = desafio;
+                document.getElementById('prompt').innerText = desafio.q;
+                document.getElementById('options-grid').innerHTML = desafio.opts.map(o =>
+                    `<button class="btn" onclick="Protocolo.check('${o}')">${o}</button>`
+                ).join('');
+            },
 
-            const status = document.getElementById('res-status');
-            if (status) {
-                status.innerText = success ? "SESIÓN_OPTIMIZADA" : "SESIÓN_ABORTADA";
-                status.style.color = success ? "var(--safe)" : "var(--critical)";
-            }
-        },
-
-        startTicker() {
-            this.ticker = setInterval(() => {
-                this.concentracion -= 0.3;
-                this.tiempoSesion--;
-                const min = Math.floor(this.tiempoSesion / 60);
-                const sec = this.tiempoSesion % 60;
-                const timerLabel = document.getElementById('timer');
-                if (timerLabel) timerLabel.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-                if (this.tiempoSesion <= 0) this.showResult(true);
+            check(val) {
+                if (val === this.current.a) {
+                    this.vicios = 0;
+                    this.vigencia = Math.min(100, this.vigencia + 8);
+                    this.logIA("PROCEDIMIENTO VÁLIDO.", "var(--safe)");
+                } else {
+                    this.fallos[this.current.tipo]++;
+                    this.vicios++;
+                    this.vigencia -= 15;
+                    this.logIA(`VICIO DETECTADO. VIGENCIA AL ${Math.max(0, Math.floor(this.vigencia))}%`, "var(--critical)");
+                }
                 this.updateUI();
-            }, 1000);
-        },
+                if (this.vicios < 3 && this.vigencia > 0) this.render();
+            },
 
-        logIA(msg, color) {
-            const consoleBox = document.getElementById('ia-console');
-            if (consoleBox) { consoleBox.innerText = msg; consoleBox.style.color = color; }
-        }
-    };
+            updateUI() {
+                const bar = document.getElementById('stability-bar');
+                if (bar) bar.style.width = `${Math.max(0, this.vigencia)}%`;
 
-    window.onload = () => Protocolo.init();
-</script>
+                if (this.vigencia <= 0 || this.vicios >= 3) {
+                    this.showResult(false);
+                    return;
+                }
+
+                const body = document.body;
+                const statusLabel = document.getElementById('status-text');
+
+                if (this.vigencia < 30) {
+                    body.className = 'state-critical';
+                    if (statusLabel) statusLabel.innerText = "ESTADO: CRÍTICO";
+                } else if (this.vigencia < 60) {
+                    body.className = 'state-warning';
+                    if (statusLabel) statusLabel.innerText = "ESTADO: DEGRADADO";
+                } else {
+                    body.className = 'state-stable'; // Clase explícita para estado normal
+                    if (statusLabel) statusLabel.innerText = "ESTADO: VIGENTE";
+                }
+            },
+
+            showResult(success) {
+                clearInterval(this.ticker);
+                const overlay = document.getElementById('result-overlay');
+                const efficiency = document.getElementById('res-efficiency');
+                const finalEff = Math.max(0, Math.floor(this.vigencia));
+
+                overlay.style.display = 'flex';
+                if (efficiency) efficiency.innerText = finalEff + "%";
+
+                // Persistencia
+                SistemaPersistencia.guardarPuntaje('repaso', finalEff);
+
+                let debilidad = "ESTABLE";
+                if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
+                else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
+
+                const msgArea = document.getElementById('res-msg');
+                if (msgArea) {
+                    msgArea.innerHTML = `Sesión finalizada. <br><span style="font-size:0.7rem; color:var(--dim)">VECTOR_DE_FALLO: <span style="color:var(--critical)">${debilidad}</span></span>`;
+                }
+
+                const status = document.getElementById('res-status');
+                if (status) {
+                    status.innerText = success ? "SESIÓN_OPTIMIZADA" : "CADUCIDAD_DE_INSTANCIA";
+                    status.style.color = success ? "var(--safe)" : "var(--critical)";
+                }
+            },
+
+            startTicker() {
+                this.ticker = setInterval(() => {
+                    this.vigencia -= 0.3;
+                    this.tiempoSesion--;
+                    const min = Math.floor(this.tiempoSesion / 60);
+                    const sec = this.tiempoSesion % 60;
+                    const timerLabel = document.getElementById('timer');
+                    if (timerLabel) timerLabel.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                    if (this.tiempoSesion <= 0) this.showResult(true);
+                    this.updateUI();
+                }, 1000);
+            },
+
+            logIA(msg, color) {
+                const consoleBox = document.getElementById('ia-console');
+                if (consoleBox) { consoleBox.innerText = msg; consoleBox.style.color = color; }
+            }
+        };
+
+        window.onload = () => Protocolo.init();
+    </script>
+
 </body>
 
 </html>

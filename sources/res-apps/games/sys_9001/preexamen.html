@@ -5,179 +5,289 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA 9001 - VALIDADOR DE COMPETENCIA</title>
-  <style>
-    :root {
-        --bg: #000;
-        --panel: #050505;
-        --accent: #ffffff; /* Blanco para consistencia con el Final */
-        --racha: #00d4ff;  /* Cian para los dots de racha */
-        --critical: #ff0000;
-        --text: #fff;
-        --dim: #333;
-    }
+    <style>
+        :root {
+            --bg: #000;
+            --panel: #050505;
+            --accent: #ffffff;
+            /* Blanco para consistencia con el Final */
+            --racha: #00d4ff;
+            /* Cian para los dots de racha */
+            --critical: #ff0000;
+            --text: #fff;
+            --dim: #333;
+        }
 
-    * { box-sizing: border-box; cursor: crosshair; }
+        * {
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
 
-    body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: 'Courier New', Courier, monospace;
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        border: 2px solid var(--dim);
-        transition: border-color 0.5s;
-    }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid var(--dim);
+            transition: border-color 0.5s;
+            padding: 1rem;
+        }
 
-    /* Efecto Escáner Biométrico */
-    body::after {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 2px;
-        background: rgba(255, 255, 255, 0.05);
-        animation: scan 4s linear infinite;
-        pointer-events: none;
-    }
+        /* Efecto Escáner Biométrico */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+        }
 
-    @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
 
-    header {
-        padding: 15px 30px;
-        background: var(--panel);
-        border-bottom: 1px solid var(--dim);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+            100% {
+                top: 100%;
+            }
+        }
 
-    .validator-tag { font-size: 0.7rem; letter-spacing: 5px; font-weight: bold; }
+        header {
+            padding: 15px 30px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    #status-display {
-        background: #080808;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        border-bottom: 1px solid var(--dim);
-    }
+        .validator-tag {
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            font-weight: bold;
+        }
 
-    .stat-box { display: flex; flex-direction: column; align-items: center; }
-    .stat-label { font-size: 0.6rem; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; }
+        #status-display {
+            background: #080808;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-bottom: 1px solid var(--dim);
+        }
 
-    .dots-row { display: flex; gap: 10px; }
-    .dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--dim); transition: all 0.3s; }
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Dots Racha */
-    .dot-streak.active { background: var(--racha); border-color: var(--racha); box-shadow: 0 0 10px var(--racha); }
+        .stat-label {
+            font-size: 0.6rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
 
-    /* Dots Intentos */
-    .dot-attempt { background: var(--critical); border-color: var(--critical); box-shadow: 0 0 8px rgba(255, 0, 0, 0.4); }
-    .dot-attempt.spent { background: #1a0000; border-color: #300000; box-shadow: none; opacity: 0.3; }
+        .dots-row {
+            display: flex;
+            gap: 10px;
+        }
 
-    .main-display {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-        text-align: center;
-    }
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid var(--dim);
+            transition: all 0.3s;
+        }
 
-    #ia-feedback {
-        margin-bottom: 25px;
-        font-size: 0.8rem;
-        height: 1.2rem;
-        color: var(--racha);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
+        /* Dots Racha */
+        .dot-streak.active {
+            background: var(--racha);
+            border-color: var(--racha);
+            box-shadow: 0 0 10px var(--racha);
+        }
 
-    #question-text { font-size: 1.6rem; max-width: 850px; margin-bottom: 40px; font-weight: bold; }
+        /* Dots Intentos */
+        .dot-attempt {
+            background: var(--critical);
+            border-color: var(--critical);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+        }
 
-    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; width: 100%; max-width: 750px; }
+        .dot-attempt.spent {
+            background: #1a0000;
+            border-color: #300000;
+            box-shadow: none;
+            opacity: 0.3;
+        }
 
-    .btn {
-        background: transparent;
-        border: 1px solid var(--dim);
-        color: var(--text);
-        padding: 22px;
-        font-size: 0.9rem;
-        transition: 0.1s;
-        text-transform: uppercase;
-    }
+        .main-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
 
-    .btn:hover { background: var(--text); color: #000; }
+        #ia-feedback {
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            height: 1.2rem;
+            color: var(--racha);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-    .body-success { border-color: var(--racha); }
-    .body-fail { border-color: var(--critical); }
+        #question-text {
+            font-size: 1.5rem;
+            /*max-width: 850px;*/
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
 
-    #result-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        display: none; /* Se activa por JS */
-        justify-content: center; align-items: center;
-        z-index: 9999;
-        padding: 20px;
-    }
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 750px;
+        }
 
-    .result-box {
-        width: 100%; max-width: 500px;
-        background: #050505;
-        border: 1px solid var(--dim);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-    }
+        .btn {
+            background: transparent;
+            border: 1px solid var(--dim);
+            color: var(--text);
+            padding: 1rem;
+           /* font-size: 0.9rem;*/
+           /* transition: 0.1s;*/
+            text-transform: uppercase;
+        }
 
-    .result-header {
-        background: #111; padding: 10px;
-        font-size: 0.6rem; color: var(--dim);
-        border-bottom: 1px solid var(--dim);
-        letter-spacing: 2px; text-align: center;
-    }
+        .btn:hover {
+            background: var(--text);
+            color: #000;
+        }
 
-    .result-content { padding: 30px; text-align: center; }
+        .body-success {
+            border-color: var(--racha);
+        }
 
-    #res-status { font-size: 1.2rem; margin: 0 0 20px 0; letter-spacing: 3px; }
-    
-    .res-data {
-        text-align: left; font-size: 0.75rem; 
-        background: #080808; padding: 15px;
-        border: 1px solid #111; margin-bottom: 20px;
-        line-height: 1.8;
-    }
+        .body-fail {
+            border-color: var(--critical);
+        }
 
-    .res-msg-text {
-        font-size: 0.85rem; color: #888;
-        margin-bottom: 30px; line-height: 1.4;
-    }
+        #result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            /* Se activa por JS */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
 
-    .btn-terminal {
-        background: #fff; color: #000;
-        border: none; padding: 15px 30px;
-        font-family: 'Courier New', monospace;
-        font-weight: bold; cursor: pointer;
-        width: 100%;
-    }
+        .result-box {
+            width: 100%;
+            max-width: 500px;
+            background: #050505;
+            border: 1px solid var(--dim);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+        }
 
-    .btn-terminal:hover { background: #ccc; }
-    
-    /* Colores dinámicos */
-    .text-success { color: #00ff00 !important; }
-    .text-fail { color: #ff0000 !important; }
-</style>
+        .result-header {
+            background: #111;
+            padding: 10px;
+            font-size: 0.6rem;
+            color: var(--dim);
+            border-bottom: 1px solid var(--dim);
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .result-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        #res-status {
+            font-size: 1.2rem;
+            margin: 0 0 20px 0;
+            letter-spacing: 3px;
+        }
+
+        .res-data {
+            text-align: left;
+            font-size: 0.75rem;
+            background: #080808;
+            padding: 15px;
+            border: 1px solid #111;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .res-msg-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .btn-terminal {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-terminal:hover {
+            background: #ccc;
+        }
+
+        /* Colores dinámicos */
+        .text-success {
+            color: #00ff00 !important;
+        }
+
+        .text-fail {
+            color: #ff0000 !important;
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <div class="validator-tag">VALIDADOR_DE_COMPETENCIA // SEC_LEVEL_02</div>
+        <div class="validator-tag">SYS_9001 // ACREDITACION</div>
         <div style="font-size: 0.6rem; color: var(--dim);">PROTOCOLO: MAESTRÍA_ORAL</div>
     </header>
 
     <div id="status-display">
+
         <div class="stat-box">
+        <div id="ia-feedback">INICIANDO PROTOCOLO DE VALIDACIÓN SÍNCRONA...</div>
+
             <div class="stat-label">Racha Necesaria (06 Consecutivas)</div>
             <div class="dots-row" id="streak-container">
             </div>
@@ -191,193 +301,216 @@
     </div>
 
     <main class="main-display">
-        <div id="ia-feedback">INICIANDO PROTOCOLO DE VALIDACIÓN SÍNCRONA...</div>
         <div id="question-text">Cargando base de datos legal...</div>
 
         <div id="options-container" class="options-grid"></div>
     </main>
-<div id="result-overlay">
-    <div class="result-box">
-        <div class="result-header">REPORTE_DE_EVALUACIÓN_9001</div>
-        <div class="result-content">
-            <h1 id="res-status">ANALIZANDO...</h1>
-            <div class="res-data">
-                <p>IDENTIFICACIÓN: <span id="res-id">USUARIO_NO_IDENTIFICADO</span></p>
-                <p>CALIFICACIÓN FINAL: <span id="res-score-value">00</span></p>
-                <p>ESTADO DE SINCRONÍA: <span id="res-sync">ERROR</span></p>
+    <div id="result-overlay">
+        <div class="result-box">
+            <div class="result-header">REPORTE_DE_EVALUACIÓN_9001</div>
+            <div class="result-content">
+                <h1 id="res-status">ANALIZANDO...</h1>
+                <div class="res-data">
+                    <p>IDENTIFICACIÓN: <span id="res-id">USUARIO_NO_IDENTIFICADO</span></p>
+                    <p>CALIFICACIÓN FINAL: <span id="res-score-value">00</span></p>
+                    <p>ESTADO DE SINCRONÍA: <span id="res-sync">ERROR</span></p>
+                </div>
+                <div id="res-msg" class="res-msg-text">
+                    Procesando dictamen del Tribunal...
+                </div>
+                <button class="btn-terminal" onclick="location.href='index.html'">CERRAR_SESIÓN</button>
             </div>
-            <div id="res-msg" class="res-msg-text">
-                Procesando dictamen del Tribunal...
-            </div>
-            <button class="btn-terminal" onclick="location.href='index.html'">CERRAR_SESIÓN</button>
         </div>
     </div>
-</div>
- 
- <script>
-    const DB_LEGAL = {
-        circunscripciones: {
-            "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
-            "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
-            "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
-            "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
-        },
-        competencias: {
-            "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
-            "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
-            "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
-        }
-    };
 
-    const Motores = {
-        circunscripcionInversa() {
-            const cats = Object.keys(DB_LEGAL.circunscripciones);
-            const catC = cats[Math.floor(Math.random() * cats.length)];
-            const depto = DB_LEGAL.circunscripciones[catC][Math.floor(Math.random() * DB_LEGAL.circunscripciones[catC].length)];
-            const catI = cats.find(c => c !== catC);
-            return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
-        },
-        circunscripcionDirecta() {
-            const cats = Object.keys(DB_LEGAL.circunscripciones);
-            const catQ = cats[Math.floor(Math.random() * cats.length)];
-            const correctos = DB_LEGAL.circunscripciones[catQ];
-            const incorrectos = DB_LEGAL.circunscripciones[cats.find(c => c !== catQ)];
-            return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
-        },
-        competenciaMaterial() {
-            const tribunales = Object.keys(DB_LEGAL.competencias);
-            const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
-            const procesos = DB_LEGAL.competencias[tribunalC];
-            const item = procesos[Math.floor(Math.random() * procesos.length)];
-            const tribunalI = tribunales.find(t => t !== tribunalC);
-            
-            // Retornamos estructura compatible con los botones de tribunales
-            return {
-                q: `Los procesos de ${item.toUpperCase()} son competencia de:`,
-                a: tribunalC,
-                opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
-                tipo: 'COMPETENCIA'
-            };
-        },
-        generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
-            const modo = Math.floor(Math.random() * 3); 
-            let opciones = [], respuesta = "";
-            if (modo === 0) { opciones = [correctos[0], incorrectos[0]]; respuesta = correctos[0]; }
-            else if (modo === 1) { opciones = [incorrectos[0], incorrectos[1]]; respuesta = "NINGUNO ES CORRECTO"; }
-            else { opciones = [correctos[0], correctos[1]]; respuesta = "AMBOS SON CORRECTOS"; }
-            return { q: pregunta, a: respuesta, opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
-        },
-        estructurar(pregunta, correcta, incorrecta, tipo) {
-            return { q: pregunta, a: correcta, opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
-        }
-    };
-
-    const Validador = {
-        streak: 0,
-        intentos: 3,
-        fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
-
-        init() {
-            this.createDots();
-            this.render();
-            this.updateUI();
-        },
-
-        createDots() {
-            const sCont = document.getElementById('streak-container');
-            sCont.innerHTML = "";
-            for (let i = 0; i < 6; i++) { sCont.innerHTML += `<div class="dot dot-streak" id="streak-${i}"></div>`; }
-            const aCont = document.getElementById('attempts-container');
-            aCont.innerHTML = "";
-            for (let i = 0; i < 3; i++) { aCont.innerHTML += `<div class="dot dot-attempt" id="attempt-${i}"></div>`; }
-        },
-
-        render() {
-            // BALANCE 50/50
-            let desafio;
-            if (Math.random() > 0.5) {
-                desafio = Motores.competenciaMaterial();
-            } else {
-                desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+    <script>
+        // 1. SISTEMA DE PERSISTENCIA (Debe estar definido y completo)
+        const SistemaPersistencia = {
+            guardarPuntaje(categoria, puntaje) {
+                try {
+                    let historial = JSON.parse(localStorage.getItem(`9001_${categoria}`)) || [];
+                    historial.push({
+                        puntos: puntaje,
+                        fecha: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    });
+                    historial.sort((a, b) => b.puntos - a.puntos);
+                    historial = historial.slice(0, 5);
+                    localStorage.setItem(`9001_${categoria}`, JSON.stringify(historial));
+                    console.log(`Persistencia: Registro guardado en ${categoria}`);
+                } catch (e) {
+                    console.error("Error en persistencia:", e);
+                }
             }
-            
-            this.current = desafio;
-            document.getElementById('question-text').innerText = desafio.q;
-            document.getElementById('options-container').innerHTML = desafio.opts.map(o =>
-                `<button class="btn" onclick="Validador.check('${o}')">${o}</button>`
-            ).join('');
-        },
+        };
 
-        check(val) {
-            if (val === this.current.a) {
-                this.streak++;
-                this.feedback("Sincronía validada. Incremetando Racha.", "var(--safe)");
-            } else {
-                this.fallos[this.current.tipo]++;
-                this.streak = 0;
-                this.intentos--;
-                this.feedback("Discrepancia detectada. Racha anulada.", "var(--critical)");
+        const DB_LEGAL = {
+            circunscripciones: {
+                "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
+                "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
+                "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
+                "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
+            },
+            competencias: {
+                "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
+                "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
+                "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
             }
+        };
 
-            this.updateUI();
-
-            if (this.streak >= 6) { this.success(); }
-            else if (this.intentos <= 0) { this.fail(); }
-            else { this.render(); }
-        },
-
-        feedback(msg, color) {
-            const f = document.getElementById('ia-feedback');
-            if (f) { f.innerText = msg; f.style.color = color; }
-        },
-
-        updateUI() {
-            for (let i = 0; i < 6; i++) {
-                const dot = document.getElementById(`streak-${i}`);
-                if (dot) i < this.streak ? dot.classList.add('active') : dot.classList.remove('active');
+        const Motores = {
+            circunscripcionInversa() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catC = cats[Math.floor(Math.random() * cats.length)];
+                const depto = DB_LEGAL.circunscripciones[catC][Math.floor(Math.random() * DB_LEGAL.circunscripciones[catC].length)];
+                const catI = cats.find(c => c !== catC);
+                return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
+            },
+            circunscripcionDirecta() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catQ = cats[Math.floor(Math.random() * cats.length)];
+                const correctos = DB_LEGAL.circunscripciones[catQ];
+                const incorrectos = DB_LEGAL.circunscripciones[cats.find(c => c !== catQ)];
+                return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
+            },
+            competenciaMaterial() {
+                const tribunales = Object.keys(DB_LEGAL.competencias);
+                const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
+                const procesos = DB_LEGAL.competencias[tribunalC];
+                const item = procesos[Math.floor(Math.random() * procesos.length)];
+                const tribunalI = tribunales.find(t => t !== tribunalC);
+                return {
+                    q: `Los procesos de ${item.toUpperCase()} son competencia de:`,
+                    a: tribunalC,
+                    opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
+                    tipo: 'COMPETENCIA'
+                };
+            },
+            generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
+                const modo = Math.floor(Math.random() * 3);
+                let opciones = [], respuesta = "";
+                if (modo === 0) { opciones = [correctos[0], incorrectos[0]]; respuesta = correctos[0]; }
+                else if (modo === 1) { opciones = [incorrectos[0], incorrectos[1]]; respuesta = "NINGUNO ES CORRECTO"; }
+                else { opciones = [correctos[0], correctos[1]]; respuesta = "AMBOS SON CORRECTOS"; }
+                return { q: pregunta, a: respuesta, opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
+            },
+            estructurar(pregunta, correcta, incorrecta, tipo) {
+                return { q: pregunta, a: correcta, opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
             }
-            for (let i = 0; i < 3; i++) {
-                const dot = document.getElementById(`attempt-${i}`);
-                if (dot) i >= this.intentos ? dot.classList.add('spent') : dot.classList.remove('spent');
+        };
+
+        const Validador = {
+            streak: 0,
+            intentos: 3,
+            fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
+
+            init() {
+                this.createDots();
+                this.render();
+                this.updateUI();
+            },
+
+            createDots() {
+                const sCont = document.getElementById('streak-container');
+                if (sCont) {
+                    sCont.innerHTML = "";
+                    for (let i = 0; i < 6; i++) { sCont.innerHTML += `<div class="dot dot-streak" id="streak-${i}"></div>`; }
+                }
+                const aCont = document.getElementById('attempts-container');
+                if (aCont) {
+                    aCont.innerHTML = "";
+                    for (let i = 0; i < 3; i++) { aCont.innerHTML += `<div class="dot dot-attempt" id="attempt-${i}"></div>`; }
+                }
+            },
+
+            render() {
+                let desafio;
+                if (Math.random() > 0.5) {
+                    desafio = Motores.competenciaMaterial();
+                } else {
+                    desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+                }
+
+                this.current = desafio;
+                document.getElementById('question-text').innerText = desafio.q;
+                document.getElementById('options-container').innerHTML = desafio.opts.map(o =>
+                    `<button class="btn" onclick="Validador.check('${o}')">${o}</button>`
+                ).join('');
+            },
+
+            check(val) {
+                if (val === this.current.a) {
+                    this.streak++;
+                    this.feedback("Sincronía validada. Registro aceptado.", "var(--safe)");
+                } else {
+                    this.fallos[this.current.tipo]++;
+                    this.streak = 0;
+                    this.intentos--;
+                    this.feedback("Vicio procesal detectado. Racha anulada.", "var(--critical)");
+                }
+
+                this.updateUI();
+
+                if (this.streak >= 6) { this.success(); }
+                else if (this.intentos <= 0) { this.fail(); }
+                else { this.render(); }
+            },
+
+            feedback(msg, color) {
+                const f = document.getElementById('ia-feedback');
+                if (f) { f.innerText = msg; f.style.color = color; }
+            },
+
+            updateUI() {
+                for (let i = 0; i < 6; i++) {
+                    const dot = document.getElementById(`streak-${i}`);
+                    if (dot) i < this.streak ? dot.classList.add('active') : dot.classList.remove('active');
+                }
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.getElementById(`attempt-${i}`);
+                    if (dot) i >= this.intentos ? dot.classList.add('spent') : dot.classList.remove('spent');
+                }
+            },
+
+            success() {
+                document.body.className = 'body-success';
+                this.showResult(6, true);
+            },
+
+            fail() {
+                document.body.className = 'body-fail';
+                this.showResult(this.streak, false);
+            },
+
+            showResult(finalScore, isApto) {
+                const overlay = document.getElementById('result-overlay');
+                if (overlay) overlay.style.display = 'flex';
+
+                const scoreDisp = document.getElementById('res-score-value');
+                if (scoreDisp) scoreDisp.innerText = finalScore;
+
+                let debilidad = "ESTABLE";
+                if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
+                else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
+                else if (this.fallos["CIRCUNSCRIPCIÓN"] > 0) debilidad = "MÚLTIPLES VECTORES";
+
+                const msgArea = document.getElementById('res-msg');
+                if (msgArea) {
+                    msgArea.innerHTML = `Validación finalizada. <br><span style="font-size:0.7rem; color:var(--dim)">VECTOR_DE_ERROR: <span style="color:var(--critical)">${debilidad}</span></span>`;
+                }
+
+                // LLAMADA CORRETA A PERSISTENCIA
+                SistemaPersistencia.guardarPuntaje('validador', finalScore);
+
+                const status = document.getElementById('res-status');
+                if (status) {
+                    status.innerText = isApto ? "RESOLUCIÓN_FIRME" : "CADUCIDAD_DE_INSTANCIA";
+                    status.style.color = isApto ? "var(--safe)" : "var(--critical)";
+                }
             }
-        },
+        };
 
-        success() {
-            document.body.className = 'body-success';
-            this.showResult(6, true);
-        },
-
-        fail() {
-            document.body.className = 'body-fail';
-            this.showResult(this.streak, false);
-        },
-
-        showResult(finalScore, isApto) {
-            const overlay = document.getElementById('result-overlay');
-            overlay.style.display = 'flex';
-            document.getElementById('res-score-value').innerText = finalScore;
-
-            let debilidad = "NINGUNA";
-            if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
-            else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
-            else if (this.fallos["CIRCUNSCRIPCIÓN"] > 0) debilidad = "AMBAS ÁREAS";
-
-            const msgArea = document.getElementById('res-msg');
-            if(msgArea) {
-                msgArea.innerHTML = `Sincronía finalizada. <br><span style="font-size:0.7rem; color:var(--dim)">ÁREA_DE_DEGRADACIÓN: <span style="color:var(--critical)">${debilidad}</span></span>`;
-            }
-
-            const SistemaPersistencia = { /* se asume definido globalmente o arriba */ };
-            if (window.SistemaPersistencia) window.SistemaPersistencia.guardarPuntaje('validador', finalScore);
-
-            const status = document.getElementById('res-status');
-            status.innerText = isApto ? "SINCRO_EXITOSA" : "SINCRO_FALLIDA";
-            status.style.color = isApto ? "var(--safe)" : "var(--critical)";
-        }
-    };
-
-    window.onload = () => Validador.init();
-</script>
+        window.onload = () => Validador.init();
+    </script>
 </body>
 
 </html>

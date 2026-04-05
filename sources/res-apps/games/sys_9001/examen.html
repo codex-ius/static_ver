@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,16 @@
         :root {
             --bg: #000;
             --panel: #050505;
-            --accent: #ffffff; 
+            --accent: #ffffff;
             --critical: #ff0000;
             --text: #fff;
             --dim: #333;
         }
 
-        * { box-sizing: border-box; cursor: crosshair; }
+        * {
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
 
         body {
             background: var(--bg);
@@ -25,20 +29,41 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 2px solid var(--dim);
-            transition: border-color 0.5s;
+            border: 8px solid var(--dim);
+            padding: 1rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+
+        /* Cuando el tiempo es menor a 4, el borde se vuelve rojo */
+        body.state-critical {
+            border-color: var(--critical) !important;
+            /* Opcional: un leve resplandor para aumentar la presión */
+            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.1);
         }
 
         /* Efecto Escáner */
         body::after {
             content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
             background: rgba(255, 255, 255, 0.05);
             animation: scan 4s linear infinite;
             pointer-events: none;
         }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
 
         header {
             padding: 15px 30px;
@@ -58,11 +83,31 @@
             border-bottom: 1px solid var(--dim);
         }
 
-        .stat-label { font-size: 0.6rem; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
-        .stat-value { font-size: 1.4rem; font-weight: bold; text-align: center; }
+        .stat-label {
+            font-size: 0.6rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
 
-        .timer-container { width: 100%; height: 4px; background: #111; }
-        #timer-bar { height: 100%; background: var(--accent); width: 100%; transition: width 1s linear; }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .timer-container {
+            width: 100%;
+            height: 4px;
+            background: #111;
+        }
+
+        #timer-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 100%;
+            transition: width 1s linear;
+        }
 
         .main-display {
             flex: 1;
@@ -74,10 +119,26 @@
             text-align: center;
         }
 
-        #ia-status { font-size: 0.75rem; color: var(--accent); margin-bottom: 20px; letter-spacing: 2px; }
-        #question-text { font-size: 1.6rem; max-width: 850px; margin-bottom: 40px; font-weight: bold; }
+        #ia-status {
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
 
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 750px; }
+        #question-text {
+            font-size: 1.6rem;
+            max-width: 850px;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 750px;
+        }
 
         .btn {
             background: transparent;
@@ -85,76 +146,278 @@
             color: var(--text);
             padding: 22px;
             font-size: 0.9rem;
-            transition: 0.1s;
+            /*transition: 0.1s;*/
             text-transform: uppercase;
         }
-        .btn:hover { background: var(--text); color: #000; }
+
+        .btn:hover {
+            background: var(--text);
+            color: #000;
+        }
 
         /* --- ESTILOS DEL RESULTADO (EL CARTEL QUE FALTA) --- */
         #result-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.98);
-            display: none; 
-            justify-content: center; align-items: center;
+            display: none;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
         }
 
         .result-box {
-            width: 100%; max-width: 500px;
+            width: 100%;
+            max-width: 500px;
             background: #050505;
             border: 1px solid var(--dim);
         }
 
         .result-header {
-            background: #111; padding: 10px;
-            font-size: 0.6rem; color: var(--dim);
+            background: #111;
+            padding: 10px;
+            font-size: 0.6rem;
+            color: var(--dim);
             border-bottom: 1px solid var(--dim);
-            text-align: center; letter-spacing: 2px;
+            text-align: center;
+            letter-spacing: 2px;
         }
 
-        .result-content { padding: 30px; text-align: center; }
+        .result-content {
+            padding: 30px;
+            text-align: center;
+        }
+
         .res-data {
-            text-align: left; font-size: 0.75rem; 
-            background: #080808; padding: 15px;
-            border: 1px solid #111; margin: 20px 0;
+            text-align: left;
+            font-size: 0.75rem;
+            background: #080808;
+            padding: 15px;
+            border: 1px solid #111;
+            margin: 20px 0;
             line-height: 1.8;
         }
-        .text-success { color: #00ff00; }
-        .text-fail { color: #ff0000; }
 
-        .btn-terminal {
-            background: #fff; color: #000;
-            border: none; padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold; width: 100%;
+        .text-success {
+            color: #00ff00;
         }
 
-        .body-success { border-color: #00ff00; }
-        .body-fail { border-color: var(--critical); }
+        .text-fail {
+            color: #ff0000;
+        }
+
+        .btn-terminal {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .body-success {
+            border-color: #00ff00;
+        }
+
+        .body-fail {
+            border-color: var(--critical);
+        }
+
+        /* Estado de Éxito (Borde Verde) */
+        body.state-success {
+            border-color: #00ff00 !important;
+            box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+
+        /* Estado Crítico (Borde Rojo - Ya lo tenías, pero aseguremos el color) */
+        body.state-critical {
+            border-color: var(--critical) !important;
+            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        /* Efecto Shake (Vibración de Error) */
+        .fx-shake {
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        <style>
+        /* ... Tus variables se mantienen ... */
+
+        body {
+            padding: 0;
+            /* Eliminamos el padding para ganar espacio */
+            border-width: 4px;
+            /* Borde más fino para pantallas pequeñas */
+        }
+
+        header {
+            padding: 10px 20px;
+            font-size: 0.65rem;
+            background: #000;
+            border-bottom: 1px solid var(--dim);
+        }
+
+        /* HUD MONITOREO COMPACTO */
+        .hud-monitor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: #050505;
+            border-bottom: 1px solid #111;
+            min-height: 40px;
+        }
+
+        .hud-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .hud-label {
+            font-size: 0.5rem;
+            color: var(--dim);
+        }
+
+        .hud-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        #ia-status {
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 50%;
+        }
+
+        /* ÁREA DE JUEGO ADAPTABLE */
+        .main-display {
+            flex: 1;
+            padding: 20px;
+            /* Reducido de 40px */
+            justify-content: flex-start;
+            /* Empieza desde arriba en móviles */
+            margin-top: 20px;
+        }
+
+        #question-text {
+            font-size: 1.2rem;
+            /* Más pequeño para que quepa todo */
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        /* GRID RESPONSIVO */
+        .options-grid {
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 15px;
+            /* Reducido para que quepan 4 botones en pantalla */
+            font-size: 0.8rem;
+        }
+
+        /* MEDIA QUERIES PARA MÓVIL EXTREMO */
+        @media (max-width: 480px) {
+            body {
+                border-width: 2px;
+            }
+
+            header {
+                padding: 8px 12px;
+            }
+
+            .hud-monitor {
+                padding: 5px 12px;
+            }
+
+            .hud-value {
+                font-size: 1rem;
+            }
+
+            #question-text {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 0.75rem;
+            }
+
+            .hud-item:first-child {
+                display: none;
+            }
+
+            /* Ocultamos Puntos en pantallas mini si es necesario */
+        }
+    </style>
     </style>
 </head>
-<body>
 
+<body>
     <header>
-        <div style="letter-spacing: 5px; font-size: 0.7rem; font-weight: bold;">TRIBUNAL_IA // EXAMEN_9001</div>
-        <div id="q-count" style="font-size: 0.8rem;">PREGUNTA: 01/10</div>
+        <div class="sys-brand">SYS_9001 // IA:TEST</div>
+        <div id="q-count">PREGUNTA: 01/20</div>
     </header>
 
-    <div class="score-panel">
-        <div class="score-item">
-            <div class="stat-label">PUNTUACIÓN</div>
-            <div id="current-score" class="stat-value">00</div>
-        </div>
-        <div class="score-item">
-            <div class="stat-label">TIEMPO</div>
-            <div id="seconds" class="stat-value">10</div>
+    <div class="hud-monitor">
+        <div id="ia-status">ESPERANDO RESPUESTA...</div>
+        <div class="hud-stats">
+            <div class="hud-item">
+                <span class="hud-label">PTS</span>
+                <span id="current-score" class="hud-value">00</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">T-MIN</span>
+                <span id="seconds" class="hud-value">10</span>
+            </div>
         </div>
     </div>
 
-    <div class="timer-container"><div id="timer-bar"></div></div>
+    <div class="timer-container">
+        <div id="timer-bar"></div>
+    </div>
 
     <main class="main-display">
-        <div id="ia-status">ESPERANDO RESPUESTA...</div>
         <div id="question-text">Cargando...</div>
         <div id="options-container" class="options-grid"></div>
     </main>
@@ -175,198 +438,224 @@
         </div>
     </div>
 
-    
-  <script>
-    const DB_LEGAL = {
-        circunscripciones: {
-            "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
-            "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
-            "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
-            "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
-        },
-        competencias: {
-            "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
-            "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
-            "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
-        }
-    };
-
-   const Motores = {
-    circunscripcionInversa() {
-        const cats = Object.keys(DB_LEGAL.circunscripciones); // ["1RA...", "2DA...", etc]
-        const catC = cats[Math.floor(Math.random() * cats.length)];
-        const opcionesDepto = DB_LEGAL.circunscripciones[catC];
-        const depto = opcionesDepto[Math.floor(Math.random() * opcionesDepto.length)];
-        const catI = cats.find(c => c !== catC);
-        
-        return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
-    },
-
-    circunscripcionDirecta() {
-        const cats = Object.keys(DB_LEGAL.circunscripciones);
-        const catQ = cats[Math.floor(Math.random() * cats.length)];
-        const correctos = DB_LEGAL.circunscripciones[catQ];
-        const catOtro = cats.find(c => c !== catQ);
-        const incorrectos = DB_LEGAL.circunscripciones[catOtro];
-
-        return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
-    },
-
-    competenciaMaterial() {
-        const tribunales = Object.keys(DB_LEGAL.competencias); // ["PAZ LETRADA", "CIVIL Y MINAS", "FAMILIA"]
-        const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
-        const procesosCorrectos = DB_LEGAL.competencias[tribunalC];
-        
-        // Seleccionamos un proceso al azar para la pregunta
-        const itemPregunta = procesosCorrectos[Math.floor(Math.random() * procesosCorrectos.length)];
-        
-        const tribunalI = tribunales.find(t => t !== tribunalC);
-        const procesosIncorrectos = DB_LEGAL.competencias[tribunalI];
-
-        // Cambiamos la lógica: La pregunta es el proceso, las opciones son los tribunales
-        return {
-            q: `Los procesos de ${itemPregunta.toUpperCase()} son competencia de:`,
-            a: tribunalC,
-            opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
-            tipo: 'COMPETENCIA'
-        };
-    },
-
-    generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
-        const modo = Math.floor(Math.random() * 3); 
-        let opciones = [], respuesta = "";
-        
-        if (modo === 0) { 
-            opciones = [correctos[0], incorrectos[0]]; 
-            respuesta = correctos[0]; 
-        } else if (modo === 1) { 
-            opciones = [incorrectos[0], incorrectos[1]]; 
-            respuesta = "NINGUNO ES CORRECTO"; 
-        } else { 
-            opciones = [correctos[0], correctos[1]]; 
-            respuesta = "AMBOS SON CORRECTOS"; 
-        }
-
-        return { 
-            q: pregunta, 
-            a: respuesta, 
-            opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), 
-            tipo: tipo 
-        };
-    },
-
-    estructurar(pregunta, correcta, incorrecta, tipo) {
-        return { 
-            q: pregunta, 
-            a: correcta, 
-            opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), 
-            tipo: tipo 
-        };
-    }
-};
-
-    const Examen = {
-        score: 0,
-        qIndex: 0,
-        timeLeft: 10,
-        timerInt: null,
-        fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
-
-        init() { this.render(); },
-
-        render() {
-            if (this.qIndex >= 10) { this.finish(); return; }
-            this.timeLeft = 10;
-            this.updateTimerUI();
-            
-            // BALANCE: 50% Competencia, 50% Circunscripción
-            let desafio;
-            if (Math.random() > 0.5) {
-                desafio = Motores.competenciaMaterial();
-            } else {
-                desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+    <script>
+        // 1. OBJETO DE PERSISTENCIA (Aseguramos su existencia global en el script)
+        const SistemaPersistencia = {
+            guardarPuntaje(categoria, puntaje) {
+                try {
+                    let historial = JSON.parse(localStorage.getItem(`9001_${categoria}`)) || [];
+                    historial.push({
+                        puntos: puntaje,
+                        fecha: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    });
+                    historial.sort((a, b) => b.puntos - a.puntos);
+                    historial = historial.slice(0, 5);
+                    localStorage.setItem(`9001_${categoria}`, JSON.stringify(historial));
+                } catch (e) {
+                    console.error("Error en persistencia:", e);
+                }
             }
-            
-            this.current = desafio;
-            document.getElementById('q-count').innerText = `PREGUNTA: ${String(this.qIndex + 1).padStart(2, '0')}/10`;
-            document.getElementById('question-text').innerText = desafio.q;
-            document.getElementById('options-container').innerHTML = desafio.opts.map(o => 
-                `<button class="btn" onclick="Examen.answer('${o}')">${o}</button>`
-            ).join('');
-            this.startTimer();
-        },
+        };
 
-        answer(val) {
-            clearInterval(this.timerInt);
-            if (val === null) {
-                this.score -= 3;
-                this.fallos[this.current.tipo]++;
-                this.status("TIEMPO AGOTADO (-3)", "var(--critical)");
-            } else if (val === this.current.a) {
-                this.score += 1;
-                this.status("CORRECTO (+1)", "#00ff00");
-            } else {
-                this.score -= 2;
-                this.fallos[this.current.tipo]++;
-                this.status("INCORRECTO (-2)", "var(--critical)");
+        const DB_LEGAL = {
+            circunscripciones: {
+                "1RA CIRCUNSCRIPCIÓN (CAPITAL)": ["Ciudad", "Las Heras", "Guaymallén", "Godoy Cruz", "Luján", "Lavalle"],
+                "2DA CIRCUNSCRIPCIÓN (SUR)": ["San Rafael", "General Alvear", "Malargüe"],
+                "3RA CIRCUNSCRIPCIÓN (ESTE)": ["San Martín", "Rivadavia", "Junín", "Santa Rosa", "La Paz"],
+                "4TA CIRCUNSCRIPCIÓN (UCO)": ["Tunuyán", "Tupungato", "San Carlos"]
+            },
+            competencias: {
+                "PAZ LETRADA": ["Desalojo por falta de pago", "Cobro de alquileres", "Causas hasta 3 JURISTAS"],
+                "CIVIL Y MINAS": ["Concursos y Quiebras", "Derechos Reales", "Amparos", "Prescripción Adquisitiva"],
+                "FAMILIA": ["Divorcios", "Adopciones", "Tutelas", "Violencia Familiar"]
             }
-            document.getElementById('current-score').innerText = this.score;
-            this.qIndex++;
-            setTimeout(() => this.render(), 800);
-        },
+        };
 
-        startTimer() {
-            clearInterval(this.timerInt);
-            this.timerInt = setInterval(() => {
-                this.timeLeft--;
+        const Motores = {
+            circunscripcionInversa() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catC = cats[Math.floor(Math.random() * cats.length)];
+                const deptos = DB_LEGAL.circunscripciones[catC];
+                const depto = deptos[Math.floor(Math.random() * deptos.length)];
+                const catI = cats.find(c => c !== catC);
+                return this.estructurar(`El departamento de ${depto.toUpperCase()} pertenece a:`, catC, catI, 'CIRCUNSCRIPCIÓN');
+            },
+            circunscripcionDirecta() {
+                const cats = Object.keys(DB_LEGAL.circunscripciones);
+                const catQ = cats[Math.floor(Math.random() * cats.length)];
+                const correctos = DB_LEGAL.circunscripciones[catQ];
+                const catI = cats.find(c => c !== catQ);
+                const incorrectos = DB_LEGAL.circunscripciones[catI];
+                return this.generarLogicaCompleja(`¿Qué departamento pertenece a la ${catQ}?`, correctos, incorrectos, 'CIRCUNSCRIPCIÓN');
+            },
+            competenciaMaterial() {
+                const tribunales = Object.keys(DB_LEGAL.competencias);
+                const tribunalC = tribunales[Math.floor(Math.random() * tribunales.length)];
+                const procesos = DB_LEGAL.competencias[tribunalC];
+                const item = procesos[Math.floor(Math.random() * procesos.length)];
+                const tribunalI = tribunales.find(t => t !== tribunalC);
+                return {
+                    q: `Los procesos de ${item.toUpperCase()} son competencia de:`,
+                    a: tribunalC,
+                    opts: [tribunalC, tribunalI, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5),
+                    tipo: 'COMPETENCIA'
+                };
+            },
+            generarLogicaCompleja(pregunta, correctos, incorrectos, tipo) {
+                const modo = Math.floor(Math.random() * 3);
+                let opciones = [], respuesta = "";
+                if (modo === 0) { opciones = [correctos[0], incorrectos[0]]; respuesta = correctos[0]; }
+                else if (modo === 1) { opciones = [incorrectos[0], incorrectos[1]]; respuesta = "NINGUNO ES CORRECTO"; }
+                else { opciones = [correctos[0], correctos[1]]; respuesta = "AMBOS SON CORRECTOS"; }
+                return { q: pregunta, a: respuesta, opts: [...opciones, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
+            },
+            estructurar(pregunta, correcta, incorrecta, tipo) {
+                return { q: pregunta, a: correcta, opts: [correcta, incorrecta, "NINGUNO ES CORRECTO", "AMBOS SON CORRECTOS"].sort(() => Math.random() - 0.5), tipo: tipo };
+            }
+        };
+
+        const Examen = {
+            score: 0,
+            qIndex: 0,
+            timeLeft: 10,
+            timerInt: null,
+            fallos: { "CIRCUNSCRIPCIÓN": 0, "COMPETENCIA": 0 },
+
+            init() { this.render(); },
+
+            render() {
+                if (this.qIndex >= 20) { this.finish(); return; }
+                this.timeLeft = 10;
                 this.updateTimerUI();
-                if (this.timeLeft <= 0) this.answer(null);
-            }, 1000);
-        },
 
-        updateTimerUI() {
-            document.getElementById('seconds').innerText = this.timeLeft;
-            const bar = document.getElementById('timer-bar');
-            if (bar) {
-                bar.style.width = (this.timeLeft * 10) + "%";
-                bar.style.backgroundColor = this.timeLeft < 4 ? "var(--critical)" : "var(--accent)";
+                let desafio;
+                if (Math.random() > 0.5) {
+                    desafio = Motores.competenciaMaterial();
+                } else {
+                    desafio = Math.random() > 0.5 ? Motores.circunscripcionDirecta() : Motores.circunscripcionInversa();
+                }
+
+                this.current = desafio;
+                document.getElementById('q-count').innerText = `PREGUNTA: ${String(this.qIndex + 1).padStart(2, '0')}/20`;
+                document.getElementById('question-text').innerText = desafio.q;
+                document.getElementById('options-container').innerHTML = desafio.opts.map(o =>
+                    `<button class="btn" onclick="Examen.answer('${o}')">${o}</button>`
+                ).join('');
+                this.startTimer();
+            },
+
+            answer(val) {
+                clearInterval(this.timerInt);
+                const body = document.body;
+
+                // Limpieza de estados previos (Aleta de tiempo y efectos anteriores)
+                body.classList.remove('state-critical', 'fx-shake', 'state-success');
+
+                if (val === null) {
+                    this.score -= 3;
+                    this.fallos[this.current.tipo]++;
+                    this.status("SILENCIO PENALIZADO (-3)", "var(--critical)");
+                    body.classList.add('state-critical', 'fx-shake'); // Rojo + Shake
+                } else if (val === this.current.a) {
+                    this.score += 1;
+                    this.status("CORRECTO (+1)", "#00ff00");
+                    body.classList.add('state-success'); // Verde (Sin shake, el éxito es sólido)
+                } else {
+                    this.score -= 2;
+                    this.fallos[this.current.tipo]++;
+                    this.status("ERROR (-2)", "var(--critical)");
+                    body.classList.add('state-critical', 'fx-shake'); // Rojo + Shake
+                }
+
+                document.getElementById('current-score').innerText = this.score;
+
+                // Feedback de transición
+                document.getElementById('options-container').innerHTML = "";
+                document.getElementById('question-text').innerText = "ACTUALIZANDO...";
+
+                this.qIndex++;
+
+                // Al renderizar la siguiente pregunta, limpiaremos los efectos
+                setTimeout(() => {
+                    body.classList.remove('fx-shake', 'state-success', 'state-critical');
+                    this.render();
+                }, 700); // Un pelín más para que se luzca el efecto
+            },
+
+
+            startTimer() {
+                clearInterval(this.timerInt);
+                this.timerInt = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateTimerUI();
+                    if (this.timeLeft <= 0) this.answer(null);
+                }, 1000);
+            },
+
+            updateTimerUI() {
+                const secondsLabel = document.getElementById('seconds');
+                if (secondsLabel) secondsLabel.innerText = this.timeLeft;
+
+                const bar = document.getElementById('timer-bar');
+                const body = document.body;
+
+                if (bar) {
+                    bar.style.width = (this.timeLeft * 10) + "%";
+
+                    if (this.timeLeft < 4) {
+                        // ESTADO DE ALERTA: Tiempo crítico
+                        bar.style.backgroundColor = "var(--critical)";
+                        body.classList.add('state-critical');
+                    } else {
+                        // ESTADO NORMAL: Operación estable
+                        bar.style.backgroundColor = "var(--accent)";
+                        body.classList.remove('state-critical');
+                    }
+                }
+            },
+
+            status(msg, color) {
+                const s = document.getElementById('ia-status');
+                if (s) { s.innerText = msg; s.style.color = color; }
+            },
+
+            finish() {
+                const isApto = this.score >= 8;
+                let debilidad = "ESTABLE";
+                if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
+                else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
+                else if (this.fallos["CIRCUNSCRIPCIÓN"] > 0) debilidad = "MÚLTIPLES VECTORES";
+
+                this.showResult(this.score, isApto, debilidad);
+            },
+
+            showResult(finalScore, isApto, debilidad) {
+                const overlay = document.getElementById('result-overlay');
+                if (overlay) overlay.style.display = 'flex';
+
+                const scoreDisp = document.getElementById('res-score-value');
+                if (scoreDisp) scoreDisp.innerText = finalScore;
+
+                const msgArea = document.getElementById('res-msg');
+                if (msgArea) {
+                    msgArea.innerHTML = `Evaluación finalizada. <br><span style="font-size:0.7rem; color:var(--dim)">VECTOR_DE_ERROR: <span style="color:var(--critical)">${debilidad}</span></span>`;
+                }
+
+                // GUARDADO DE DATOS
+                SistemaPersistencia.guardarPuntaje('examen', finalScore);
+
+                const status = document.getElementById('res-status');
+                if (status) {
+                    status.innerText = isApto ? "RESOLUCIÓN_FIRME" : "INSUFICIENCIA_PROCESAL";
+                    status.style.color = isApto ? "var(--safe)" : "var(--critical)";
+                }
+                document.body.className = isApto ? 'body-success' : 'body-fail';
             }
-        },
+        };
 
-        status(msg, color) {
-            const s = document.getElementById('ia-status');
-            if (s) { s.innerText = msg; s.style.color = color; }
-        },
+        window.onload = () => Examen.init();
+    </script>
 
-        finish() {
-            const isApto = this.score >= 8;
-            let debilidad = "NINGUNA";
-            if (this.fallos["CIRCUNSCRIPCIÓN"] > this.fallos["COMPETENCIA"]) debilidad = "CIRCUNSCRIPCIÓN";
-            else if (this.fallos["COMPETENCIA"] > this.fallos["CIRCUNSCRIPCIÓN"]) debilidad = "COMPETENCIA_MATERIAL";
-            else if (this.fallos["CIRCUNSCRIPCIÓN"] > 0) debilidad = "AMBAS ÁREAS";
-
-            this.showResult(this.score, isApto, debilidad);
-        },
-
-        showResult(finalScore, isApto, debilidad) {
-            const overlay = document.getElementById('result-overlay');
-            overlay.style.display = 'flex';
-            document.getElementById('res-score-value').innerText = finalScore;
-            
-            const msgArea = document.getElementById('res-msg');
-            if(msgArea) {
-                msgArea.innerHTML = `Análisis de vectores finalizado. <br><span style="font-size:0.7rem; color:var(--dim)">ÁREA_DE_DEGRADACIÓN: <span style="color:var(--critical)">${debilidad}</span></span>`;
-            }
-
-            SistemaPersistencia.guardarPuntaje('examen', finalScore);
-            const status = document.getElementById('res-status');
-            status.innerText = isApto ? "SINCRO_EXITOSA" : "EVALUACIÓN_FALLIDA";
-            status.style.color = isApto ? "var(--safe)" : "var(--critical)";
-            document.body.className = isApto ? 'body-success' : 'body-fail';
-        }
-    };
-
-    window.onload = () => Examen.init();
-</script>
 </body>
+
 </html>
